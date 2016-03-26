@@ -1,0 +1,6 @@
+# PhpStorm settings directory
+.idea
+
+# composer stuff
+vendor/
+composer.lock
