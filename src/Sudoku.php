@@ -129,13 +129,14 @@ class Sudoku
     }
 
     /**
-     * @param int      $size The size of the Sudoku. Notice: The size have to be one of the following:
-     *                       4, 9, 16, 25, 36.
+     * @param int      $size The size of the Sudoku. Notice: The size have to be one of the
+     *                       following: 4, 9, 16, 25, 36.
      * @param int      $difficulty
      * @param int|null $seed
+     * @return array|false
      * @throws \InvalidArgumentException
      */
-    public static function generateSudoku($size, $difficulty, $seed = null)
+    public static function generateWithSolution($size, $difficulty, $seed = null)
     {
         // check inputs
         if(!in_array($size,self::$dimensions,true)
@@ -171,8 +172,8 @@ class Sudoku
         }
 
         // fill the gaps
-        $sudoku = self::solve($sudoku);
-
+        $solution = self::solve($sudoku);
+        $task = $solution;
         // make new gaps
         $numFields = pow($size, 2);
         $gapFields = range(0,$numFields - 1);
@@ -209,21 +210,35 @@ class Sudoku
         {
             $row = $gapFields[$i] % $size;
             $col = ($gapFields[$i] - $row) / $size;
-            $sudoku[$row][$col] = null;
+            $task[$row][$col] = null;
         }
 
-        return $sudoku;
+        return [$task,$solution];
+    }
+
+    /**
+     * Wrapper that calls Sudoku::generateWithSolution, but returns only the task.
+     * @param      $size
+     * @param      $difficulty
+     * @param null $seed
+     * @return mixed
+     */
+    public static function generate($size, $difficulty, $seed = null)
+    {
+        list($task,) = self::generateWithSolution($size, $difficulty, $seed);
+        return $task;
     }
 
     /**
      * Checks if the input is a valid sudoku solution.
      *
-     * @param array $solution
+     * @param array $solution The solution to be checked
+     * @param array $task     The task that should be result in the solution. If provided, it
+     *                        is checked if the solution relates to the task
      * @return bool
-     * @throws \InvalidArgumentException If the input cannot be interpreted as a sudoku
-     *                                   solution.
+     * @throws \InvalidArgumentException
      */
-    public static function checkSolution(array $solution)
+    public static function checkSolution(array $solution, array $task = null)
     {
         if(!self::checkInput($solution))
         {
@@ -231,6 +246,22 @@ class Sudoku
         }
 
         $dim = count($solution);
+
+        if($task !== null)
+        {
+            if(count($task) !== $dim)
+                return false;
+
+            for($i = 0; $i < $dim; $i++)
+            {
+                for($j = 0; $j < $dim; $j++)
+                {
+                    if($task[$i][$j] !== null && $solution[$i][$j] !== $task[$i][$j])
+                        return false;
+                }
+            }
+        }
+
 
         // check rows
         for($row = 0; $row < $dim; $row++)

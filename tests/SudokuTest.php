@@ -91,6 +91,29 @@ class SudokuTest extends PHPUnit_Framework_TestCase
                    [3,4,5,2,8,6,1,7,9]];
         static::assertTrue(Sudoku::checkSolution($valid2));
 
+        static::assertFalse(Sudoku::checkSolution($valid1,$valid2));
+        $task1 = [[5,3,4,6,7,8,9,1,2],
+                  [6,7,2,1,9,5,3,null,null],
+                  [1,9,8,3,4,2,5,6,7],
+                  [8,5,9,7,6,1,4,2,3],
+                  [4,2,6,8,5,3,7,9,1],
+                  [7,1,3,9,2,4,8,5,6],
+                  [9,6,1,5,3,7,2,8,4],
+                  [2,8,7,4,1,9,6,3,5],
+                  [3,4,5,2,8,6,1,7,9]];
+        $task2 = [[5,3,4,6,7,8,9,1,2],
+                   [6,7,2,1,9,5,3,null,null],
+                   [1,9,8,3,4,2,5,6,7],
+                   [8,5,9,7,6,1,4,2,3],
+                   [4,2,6,8,5,3,7,9,1],
+                   [7,1,3,9,2,4,8,5,6],
+                   [9,6,1,5,3,7,2,4,8],
+                   [2,8,7,4,1,9,6,3,5],
+                   [3,4,5,2,8,6,1,7,9]];
+
+        static::assertTrue(Sudoku::checkSolution($valid2,$task1));
+        static::assertFalse(Sudoku::checkSolution($valid2,$task2));
+
         // invalid Sudokus
         $invalid1 = [[1,3,2,4],
                    [3,4,1,2],
@@ -149,7 +172,7 @@ class SudokuTest extends PHPUnit_Framework_TestCase
     public function testGenerate()
     {
         // $sudoku get randomly generated
-        $sudoku = Sudoku::generateSudoku(9,Sudoku::NORMAL);
+        $sudoku = Sudoku::generate(9, Sudoku::NORMAL);
 
         // it is a sudoku, since:
         // - the input is valid
@@ -168,7 +191,7 @@ class SudokuTest extends PHPUnit_Framework_TestCase
                             [4,9,null,3,null,null,null,null,null],
                             [null,null,null,2,null,null,null,null,9],
                             [null,2,4,null,null,1,5,3,null],
-                            [null,null,null,null,null,null,2,null,7]],Sudoku::generateSudoku(9,Sudoku::NORMAL,0));
+                            [null,null,null,null,null,null,2,null,7]],Sudoku::generate(9, Sudoku::NORMAL, 0));
     }
 
 
