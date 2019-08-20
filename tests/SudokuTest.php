@@ -171,27 +171,27 @@ class SudokuTest extends PHPUnit_Framework_TestCase
 
     public function testGenerate()
     {
-        // $sudoku get randomly generated
-        $sudoku = Sudoku::generate(9, Sudoku::NORMAL);
+        foreach([Sudoku::VERY_EASY,
+                 Sudoku::EASY,
+                 Sudoku::NORMAL,
+                 Sudoku::MEDIUM,
+                 Sudoku::HARD] as $difficulty)
+        {
+            // $sudoku get randomly generated
+            $sudoku = Sudoku::generate(9, $difficulty);
 
-        // it is a sudoku, since:
-        // - the input is valid
-        static::assertTrue(Sudoku::checkInput($sudoku));
-        // - it is not a solution
-        static::assertFalse(Sudoku::checkSolution($sudoku));
-        // - but it is solvable
-        static::assertNotFalse(Sudoku::solve($sudoku));
-        
+            // it is a sudoku, since:
+            // - the input is valid
+            static::assertTrue(Sudoku::checkInput($sudoku));
+            // - it is not a solution
+            static::assertFalse(Sudoku::checkSolution($sudoku));
+            // - but it is solvable
+            static::assertNotFalse(Sudoku::solve($sudoku));
+        }
+
         // check reproducibility
-        static::assertSame([[6,null,null,null,8,9,null,2,null],
-                            [5,null,7,4,null,2,null,1,null],
-                            [2,4,null,6,null,null,8,null,3],
-                            [3,6,null,1,null,null,null,null,null],
-                            [null,5,null,null,null,null,null,null,null],
-                            [4,9,null,3,null,null,null,null,null],
-                            [null,null,null,2,null,null,null,null,9],
-                            [null,2,4,null,null,1,5,3,null],
-                            [null,null,null,null,null,null,2,null,7]],Sudoku::generate(9, Sudoku::NORMAL, 0));
+        static::assertSame(Sudoku::generate(9, Sudoku::NORMAL, 0),
+                           Sudoku::generate(9, Sudoku::NORMAL, 0));
     }
 
 
