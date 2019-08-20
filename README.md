@@ -15,7 +15,7 @@ Generate random Sudokus of different size and difficulty and check the solution.
 - Sudokus are reproducible via a integer seed.
 - Check if a input is a solution of any Sudoku or a solution to a specific task.
 - Solve Sudokus.
-- works with PHP 5.5, 5.6 and 7.0 (maybe also with PHP < 5.5, but no one should use that old PHP versions)
+- works with PHP 5.6 and 7.0 (maybe also with PHP < 5.6, but no one should use that old PHP versions)
 - backend only, so you can build your own frontend however you like it.
 
 Installation
