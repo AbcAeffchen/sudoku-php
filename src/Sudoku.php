@@ -8,7 +8,8 @@
  * @author      Alexander Schickedanz (AbcAeffchen) <abcaeffchen@gmail.com>
  */
 namespace AbcAeffchen\sudoku;
-//use AbcAeffchen\sudoku\Sudoku;
+
+use InvalidArgumentException;
 
 class Sudoku
 {
@@ -30,13 +31,13 @@ class Sudoku
      *                          if it's a two dimensional square array containing only int and
      *                          null values
      * @return array|false      Returns the solution or false if the sudoku is not solvable.
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public static function solve(array $sudoku, $checkInput = false)
     {
         if($checkInput && !self::checkInput($sudoku))
         {
-            throw new \InvalidArgumentException('The input is no valid Sudoku array.');
+            throw new InvalidArgumentException('The input is no valid Sudoku array.');
         }
 
         return self::recursive_solve($sudoku, count($sudoku));
@@ -134,15 +135,15 @@ class Sudoku
      * @param int      $difficulty
      * @param int|null $seed
      * @return array|false
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public static function generateWithSolution($size, $difficulty, $seed = null)
     {
         // check inputs
         if(!in_array($size,self::$dimensions,true)
-            || in_array($difficulty,range(0,5),true)    // todo
+            || !in_array($difficulty, [self::VERY_EASY, self::EASY, self::NORMAL, self::MEDIUM, self::HARD], true)
             || ($seed !== null && !is_int($seed)) )
-            throw new \InvalidArgumentException('Invalid input');
+            throw new InvalidArgumentException('Invalid input');
 
         // initialize random generator
         if($seed === null)
@@ -236,13 +237,13 @@ class Sudoku
      * @param array $task     The task that should be result in the solution. If provided, it
      *                        is checked if the solution relates to the task
      * @return bool
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public static function checkSolution(array $solution, array $task = null)
     {
         if(!self::checkInput($solution))
         {
-            throw new \InvalidArgumentException('Input is no Sudoku array.');
+            throw new InvalidArgumentException('Input is no Sudoku array.');
         }
 
         $dim = count($solution);
