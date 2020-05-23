@@ -44,7 +44,14 @@ class Sudoku
         return self::recursive_solve($sudoku, count($sudoku));
     }
 
-    private static function recursive_solve(array $sudoku, $size, $row = 0, $col = 0)
+    /**
+     * @param array $sudoku
+     * @param int $size
+     * @param int $row
+     * @param int $col
+     * @return array|bool
+     */
+    private static function recursive_solve(array $sudoku, int $size, int $row = 0, int $col = 0)
     {
         do {
             while ($sudoku[$row][$col] !== null) {
@@ -78,7 +85,13 @@ class Sudoku
         return false;
     }
 
-    private static function nextCoordinates($size, &$row, &$col)
+    /**
+     * @param int $size
+     * @param int $row
+     * @param int $col
+     * @return bool
+     */
+    private static function nextCoordinates(int $size, int &$row, int &$col): bool
     {
         $row++;
         if ($row >= $size) {
@@ -91,7 +104,14 @@ class Sudoku
         return true;
     }
 
-    private static function getPossibilities(array $sudoku, $size, $row, $col)
+    /**
+     * @param array $sudoku
+     * @param int $size
+     * @param int $row
+     * @param int $col
+     * @return array
+     */
+    private static function getPossibilities(array $sudoku, int $size, int $row, int $col): array
     {
         $possibilities = range(1, $size);
         // check row and col
@@ -131,7 +151,7 @@ class Sudoku
      * @return array|false
      * @throws InvalidArgumentException
      */
-    public static function generateWithSolution($size, $difficulty, $seed = null)
+    public static function generateWithSolution(int $size, int $difficulty, ?int $seed)
     {
         // check inputs
         if (!in_array($size, self::$dimensions, true)
@@ -195,7 +215,7 @@ class Sudoku
                 $max = ceil($numFields * 0.27);
         }
 
-        $numGapFields = $numFields - mt_rand($min, $max);
+        $numGapFields = $numFields - mt_rand((int)$min, (int)$max);
 
         for ($i = 0; $i < $numGapFields; $i++) {
             $row = $gapFields[$i] % $size;
@@ -208,12 +228,12 @@ class Sudoku
 
     /**
      * Wrapper that calls Sudoku::generateWithSolution, but returns only the task.
-     * @param      $size
-     * @param      $difficulty
+     * @param int $size
+     * @param int $difficulty
      * @param null $seed
      * @return mixed
      */
-    public static function generate($size, $difficulty, $seed = null)
+    public static function generate(int $size, int $difficulty, int $seed = null)
     {
         list($task,) = self::generateWithSolution($size, $difficulty, $seed);
         return $task;
@@ -228,7 +248,7 @@ class Sudoku
      * @return bool
      * @throws InvalidArgumentException
      */
-    public static function checkSolution(array $solution, array $task = null)
+    public static function checkSolution(array $solution, array $task = null): bool
     {
         if (!self::checkInput($solution)) {
             throw new InvalidArgumentException('Input is no Sudoku array.');
@@ -296,7 +316,7 @@ class Sudoku
      * the seed set by mt_srand(). This means the result is reproducible.
      * @param array $array
      */
-    private static function array_shuffle(array &$array)
+    private static function array_shuffle(array &$array): void
     {
         for ($i = count($array) - 1; $i > 0; $i--) {
             $j = mt_rand(0, $i);
@@ -315,7 +335,7 @@ class Sudoku
      * @param array $inputSudoku
      * @return bool
      */
-    public static function checkInput(array &$inputSudoku)
+    public static function checkInput(array &$inputSudoku): bool
     {
         $rowCount = count($inputSudoku);
         if (!in_array($rowCount, self::$dimensions, true)) {
