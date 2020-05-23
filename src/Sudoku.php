@@ -22,8 +22,8 @@ class Sudoku
     const MEDIUM = 15;
     const HARD = 20;
 
-    private static array $blockSizes = [4 => 2, 9 => 3, 16 => 4, 25 => 5, 36 => 6];
-    private static array $dimensions = [4, 9, 16, 25, 36];
+    private static $blockSizes = [4 => 2, 9 => 3, 16 => 4, 25 => 5, 36 => 6];
+    private static $dimensions = [4, 9, 16, 25, 36];
 
     /**
      * Solves the Sudoku.
