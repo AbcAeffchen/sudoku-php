@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * sudoku-php
  *
@@ -20,8 +21,8 @@ class Sudoku
     const MEDIUM    = 15;
     const HARD      = 20;
 
-    private static $blockSizes = [4 => 2, 9 => 3, 16 => 4, 25 => 5, 36 => 6];
-    private static $dimensions = [4, 9, 16, 25, 36];
+    private static array $blockSizes = [4 => 2, 9 => 3, 16 => 4, 25 => 5, 36 => 6];
+    private static array $dimensions = [4, 9, 16, 25, 36];
 
     /**
      * Solves the Sudoku.
@@ -33,7 +34,7 @@ class Sudoku
      * @return array|false      Returns the solution or false if the sudoku is not solvable.
      * @throws InvalidArgumentException
      */
-    public static function solve(array $sudoku, $checkInput = false)
+    public static function solve(array $sudoku, bool $checkInput = false)
     {
         if($checkInput && !self::checkInput($sudoku))
         {
@@ -94,7 +95,7 @@ class Sudoku
         return true;
     }
 
-    private static function getPossibilities(array &$sudoku, $size, $row, $col)
+    private static function getPossibilities(array $sudoku, $size, $row, $col)
     {
         $possibilities = range(1,$size);
         // check row and col
