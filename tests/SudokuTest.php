@@ -3,11 +3,12 @@
 require __DIR__ . '/../vendor/autoload.php';
 
 use AbcAeffchen\sudoku\Sudoku;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author    Alexander Schickedanz (AbcAeffchen) <abcaeffchen@gmail.com>
  */
-class SudokuTest extends PHPUnit_Framework_TestCase
+class SudokuTest extends TestCase
 {
 
     public function testCheckInput()
