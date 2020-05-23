@@ -8,6 +8,7 @@ declare(strict_types=1);
  * @link        https://github.com/AbcAeffchen/sudoku-php
  * @author      Alexander Schickedanz (AbcAeffchen) <abcaeffchen@gmail.com>
  */
+
 namespace AbcAeffchen\sudoku;
 
 use InvalidArgumentException;
@@ -16,10 +17,10 @@ class Sudoku
 {
 
     const VERY_EASY = 0;
-    const EASY      = 5;
-    const NORMAL    = 10;
-    const MEDIUM    = 15;
-    const HARD      = 20;
+    const EASY = 5;
+    const NORMAL = 10;
+    const MEDIUM = 15;
+    const HARD = 20;
 
     private static array $blockSizes = [4 => 2, 9 => 3, 16 => 4, 25 => 5, 36 => 6];
     private static array $dimensions = [4, 9, 16, 25, 36];
@@ -28,7 +29,7 @@ class Sudoku
      * Solves the Sudoku.
      *
      * @param array $sudoku
-     * @param bool  $checkInput If true, the input gets checked for a valid Sudoku array, i.e.
+     * @param bool $checkInput If true, the input gets checked for a valid Sudoku array, i.e.
      *                          if it's a two dimensional square array containing only int and
      *                          null values
      * @return array|false      Returns the solution or false if the sudoku is not solvable.
@@ -36,8 +37,7 @@ class Sudoku
      */
     public static function solve(array $sudoku, bool $checkInput = false)
     {
-        if($checkInput && !self::checkInput($sudoku))
-        {
+        if ($checkInput && !self::checkInput($sudoku)) {
             throw new InvalidArgumentException('The input is no valid Sudoku array.');
         }
 
@@ -46,35 +46,32 @@ class Sudoku
 
     private static function recursive_solve(array $sudoku, $size, $row = 0, $col = 0)
     {
-        do
-        {
-            while( $sudoku[$row][$col] !== null )
-            {
-                if(!self::nextCoordinates($size,$row,$col))
+        do {
+            while ($sudoku[$row][$col] !== null) {
+                if (!self::nextCoordinates($size, $row, $col))
                     return $sudoku;
             }
 
             $possibilities = self::getPossibilities($sudoku, $size, $row, $col);
             $numPos = count($possibilities);
-            if($numPos === 0)
+            if ($numPos === 0)
                 return false;
 
-            if($numPos === 1)
+            if ($numPos === 1)
                 $sudoku[$row][$col] = reset($possibilities);
             else
                 break;
 
-        } while(true);
+        } while (true);
 
         self::array_shuffle($possibilities);
         $nextRow = $row;
         $nextCol = $col;
-        self::nextCoordinates($size,$nextRow,$nextCol);     // cannot return false here.
-        foreach($possibilities as $possibility)
-        {
+        self::nextCoordinates($size, $nextRow, $nextCol);     // cannot return false here.
+        foreach ($possibilities as $possibility) {
             $sudoku[$row][$col] = $possibility;
-            $res = self::recursive_solve($sudoku,$size,$nextRow,$nextCol);
-            if($res !== false)
+            $res = self::recursive_solve($sudoku, $size, $nextRow, $nextCol);
+            if ($res !== false)
                 return $res;
         }
 
@@ -84,11 +81,10 @@ class Sudoku
     private static function nextCoordinates($size, &$row, &$col)
     {
         $row++;
-        if( $row >= $size )
-        {
+        if ($row >= $size) {
             $row = 0;
             $col++;
-            if( $col >= $size )
+            if ($col >= $size)
                 return false;
         }
 
@@ -97,13 +93,12 @@ class Sudoku
 
     private static function getPossibilities(array $sudoku, $size, $row, $col)
     {
-        $possibilities = range(1,$size);
+        $possibilities = range(1, $size);
         // check row and col
-        for($i = 0; $i < $size; $i++)
-        {
-            if($sudoku[$row][$i] !== null)
+        for ($i = 0; $i < $size; $i++) {
+            if ($sudoku[$row][$i] !== null)
                 unset($possibilities[$sudoku[$row][$i] - 1]);
-            if($sudoku[$i][$col] !== null)
+            if ($sudoku[$i][$col] !== null)
                 unset($possibilities[$sudoku[$i][$col] - 1]);
         }
 
@@ -113,14 +108,12 @@ class Sudoku
         $blockR = $row - $jumpRow;
         $blockC = $col - $jumpCol;
 
-        for($blockRow = 0; $blockRow < self::$blockSizes[$size]; $blockRow++)
-        {
-            if($blockRow === $jumpRow)
+        for ($blockRow = 0; $blockRow < self::$blockSizes[$size]; $blockRow++) {
+            if ($blockRow === $jumpRow)
                 continue;
 
-            for($blockCol = 0; $blockCol < self::$blockSizes[$size]; $blockCol++)
-            {
-                if($blockCol === $jumpCol || $sudoku[$blockR + $blockRow][$blockC + $blockCol] === null)
+            for ($blockCol = 0; $blockCol < self::$blockSizes[$size]; $blockCol++) {
+                if ($blockCol === $jumpCol || $sudoku[$blockR + $blockRow][$blockC + $blockCol] === null)
                     continue;
 
                 unset($possibilities[$sudoku[$blockR + $blockRow][$blockC + $blockCol] - 1]);
@@ -131,9 +124,9 @@ class Sudoku
     }
 
     /**
-     * @param int      $size The size of the Sudoku. Notice: The size have to be one of the
+     * @param int $size The size of the Sudoku. Notice: The size have to be one of the
      *                       following: 4, 9, 16, 25, 36.
-     * @param int      $difficulty
+     * @param int $difficulty
      * @param int|null $seed
      * @return array|false
      * @throws InvalidArgumentException
@@ -141,13 +134,13 @@ class Sudoku
     public static function generateWithSolution($size, $difficulty, $seed = null)
     {
         // check inputs
-        if(!in_array($size,self::$dimensions,true)
+        if (!in_array($size, self::$dimensions, true)
             || !in_array($difficulty, [self::VERY_EASY, self::EASY, self::NORMAL, self::MEDIUM, self::HARD], true)
-            || ($seed !== null && !is_int($seed)) )
+            || ($seed !== null && !is_int($seed)))
             throw new InvalidArgumentException('Invalid input');
 
         // initialize random generator
-        if($seed === null)
+        if ($seed === null)
             $seed = time();
 
         mt_srand($seed + $difficulty * 17);
@@ -161,13 +154,10 @@ class Sudoku
         $values = range(1, $size);
 
         // fill randomly one block in each row (of blocks)
-        for($row = 0; $row < self::$blockSizes[$size]; $row += self::$blockSizes[$size])
-        {
+        for ($row = 0; $row < self::$blockSizes[$size]; $row += self::$blockSizes[$size]) {
             self::array_shuffle($values);
-            for($blockRows = 0; $blockRows < self::$blockSizes[$size]; $blockRows++)
-            {
-                for($blockCols = 0; $blockCols < self::$blockSizes[$size]; $blockCols++)
-                {
+            for ($blockRows = 0; $blockRows < self::$blockSizes[$size]; $blockRows++) {
+                for ($blockCols = 0; $blockCols < self::$blockSizes[$size]; $blockCols++) {
                     $sudoku[$row * self::$blockSizes[$size] + $blockRows][$cols[$row] * self::$blockSizes[$size] + $blockCols] = $values[$blockRows * self::$blockSizes[$size] + $blockCols];
                 }
             }
@@ -178,11 +168,10 @@ class Sudoku
         $task = $solution;
         // make new gaps
         $numFields = pow($size, 2);
-        $gapFields = range(0,$numFields - 1);
+        $gapFields = range(0, $numFields - 1);
         self::array_shuffle($gapFields);
 
-        switch($difficulty)
-        {
+        switch ($difficulty) {
             case self::VERY_EASY:
                 $min = floor($numFields * 0.43);
                 $max = ceil($numFields * 0.50);
@@ -206,16 +195,15 @@ class Sudoku
                 $max = ceil($numFields * 0.27);
         }
 
-        $numGapFields = $numFields - mt_rand($min,$max);
+        $numGapFields = $numFields - mt_rand($min, $max);
 
-        for($i = 0; $i < $numGapFields; $i++)
-        {
+        for ($i = 0; $i < $numGapFields; $i++) {
             $row = $gapFields[$i] % $size;
             $col = ($gapFields[$i] - $row) / $size;
             $task[$row][$col] = null;
         }
 
-        return [$task,$solution];
+        return [$task, $solution];
     }
 
     /**
@@ -235,30 +223,26 @@ class Sudoku
      * Checks if the input is a valid sudoku solution.
      *
      * @param array $solution The solution to be checked
-     * @param array $task     The task that should be result in the solution. If provided, it
+     * @param array $task The task that should be result in the solution. If provided, it
      *                        is checked if the solution relates to the task
      * @return bool
      * @throws InvalidArgumentException
      */
     public static function checkSolution(array $solution, array $task = null)
     {
-        if(!self::checkInput($solution))
-        {
+        if (!self::checkInput($solution)) {
             throw new InvalidArgumentException('Input is no Sudoku array.');
         }
 
         $dim = count($solution);
 
-        if($task !== null)
-        {
-            if(count($task) !== $dim)
+        if ($task !== null) {
+            if (count($task) !== $dim)
                 return false;
 
-            for($i = 0; $i < $dim; $i++)
-            {
-                for($j = 0; $j < $dim; $j++)
-                {
-                    if($task[$i][$j] !== null && $solution[$i][$j] !== $task[$i][$j])
+            for ($i = 0; $i < $dim; $i++) {
+                for ($j = 0; $j < $dim; $j++) {
+                    if ($task[$i][$j] !== null && $solution[$i][$j] !== $task[$i][$j])
                         return false;
                 }
             }
@@ -266,13 +250,11 @@ class Sudoku
 
 
         // check rows
-        for($row = 0; $row < $dim; $row++)
-        {
-            $valueFound = array_fill(1,$dim,false);
-            for($col = 0; $col < $dim; $col++)
-            {
+        for ($row = 0; $row < $dim; $row++) {
+            $valueFound = array_fill(1, $dim, false);
+            for ($col = 0; $col < $dim; $col++) {
                 // null check is only needed here
-                if($solution[$row][$col] === null || $valueFound[$solution[$row][$col]] === true)
+                if ($solution[$row][$col] === null || $valueFound[$solution[$row][$col]] === true)
                     return false;
                 else
                     $valueFound[$solution[$row][$col]] = true;
@@ -280,12 +262,10 @@ class Sudoku
         }
 
         // check columns
-        for($col = 0; $col < $dim; $col++)
-        {
-            $valueFound = array_fill(1,$dim,false);
-            for($row = 0; $row < $dim; $row++)
-            {
-                if($valueFound[$solution[$row][$col]] === true)
+        for ($col = 0; $col < $dim; $col++) {
+            $valueFound = array_fill(1, $dim, false);
+            for ($row = 0; $row < $dim; $row++) {
+                if ($valueFound[$solution[$row][$col]] === true)
                     return false;
                 else
                     $valueFound[$solution[$row][$col]] = true;
@@ -294,19 +274,15 @@ class Sudoku
 
         // check blocks
         $blockSize = self::$blockSizes[$dim];
-        for($row = 0; $row < $dim; $row += $blockSize)
-        {
-            for($col = 0; $col < $dim; $col += $blockSize)
-            {
-                $valueFound = array_fill(1,$dim,false);
-                for($blockRow = 0; $blockRow < $blockSize;$blockRow++)
-                {
-                    for($blockCol = 0; $blockCol < $blockSize;$blockCol++)
-                    {
-                        if($valueFound[$solution[$row+$blockRow][$col+$blockCol]] === true)
+        for ($row = 0; $row < $dim; $row += $blockSize) {
+            for ($col = 0; $col < $dim; $col += $blockSize) {
+                $valueFound = array_fill(1, $dim, false);
+                for ($blockRow = 0; $blockRow < $blockSize; $blockRow++) {
+                    for ($blockCol = 0; $blockCol < $blockSize; $blockCol++) {
+                        if ($valueFound[$solution[$row + $blockRow][$col + $blockCol]] === true)
                             return false;
                         else
-                            $valueFound[$solution[$row+$blockRow][$col+$blockCol]] = true;
+                            $valueFound[$solution[$row + $blockRow][$col + $blockCol]] = true;
                     }
                 }
             }
@@ -322,9 +298,8 @@ class Sudoku
      */
     private static function array_shuffle(array &$array)
     {
-        for($i = count($array) - 1; $i > 0; $i--)
-        {
-            $j = mt_rand(0,$i);
+        for ($i = count($array) - 1; $i > 0; $i--) {
+            $j = mt_rand(0, $i);
             $temp = $array[$i];
             $array[$i] = $array[$j];
             $array[$j] = $temp;
@@ -343,32 +318,25 @@ class Sudoku
     public static function checkInput(array &$inputSudoku)
     {
         $rowCount = count($inputSudoku);
-        if(!in_array($rowCount,self::$dimensions,true))
-        {
+        if (!in_array($rowCount, self::$dimensions, true)) {
             return false;
         }
 
-        foreach($inputSudoku as &$row)
-        {
+        foreach ($inputSudoku as &$row) {
             // check dimensions
-            if(!is_array($row) || count($row) !== $rowCount)
-            {
+            if (!is_array($row) || count($row) !== $rowCount) {
                 return false;
             }
 
             // check types
-            foreach($row as &$item)
-            {
-                if($item === null)
-                {
+            foreach ($row as &$item) {
+                if ($item === null) {
                     continue;
                 }
-                if(!is_int($item))
-                {
-                    $item = (int) $item;
+                if (!is_int($item)) {
+                    $item = (int)$item;
                 }
-                if($item < 1 || $item > $rowCount)
-                {
+                if ($item < 1 || $item > $rowCount) {
                     return false;
                 }
             }
