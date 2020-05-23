@@ -2,8 +2,8 @@ sudoku-php
 =====
 
 [![Build Status](https://travis-ci.org/AbcAeffchen/sudoku-php.svg?branch=master)](https://travis-ci.org/AbcAeffchen/sudoku-php)
-[![Latest Stable Version](https://poser.pugx.org/abcaeffchen/sudoku-php/v/stable.svg)](https://packagist.org/packages/abcaeffchen/sudoku-php) 
-[![Total Downloads](https://poser.pugx.org/abcaeffchen/sudoku-php/downloads.svg)](https://packagist.org/packages/abcaeffchen/sudoku-php) 
+[![Latest Stable Version](https://poser.pugx.org/abcaeffchen/sudoku-php/v/stable.svg)](https://packagist.org/packages/abcaeffchen/sudoku-php)
+[![Total Downloads](https://poser.pugx.org/abcaeffchen/sudoku-php/downloads.svg)](https://packagist.org/packages/abcaeffchen/sudoku-php)
 [![License](https://poser.pugx.org/abcaeffchen/sudoku-php/license.svg)](https://packagist.org/packages/abcaeffchen/sudoku-php)
 
 Genral
@@ -15,7 +15,7 @@ Generate random Sudokus of different size and difficulty and check the solution.
 - Sudokus are reproducible via a integer seed.
 - Check if a input is a solution of any Sudoku or a solution to a specific task.
 - Solve Sudokus.
-- works with PHP 5.6 and 7.0 (maybe also with PHP < 5.6, but no one should use that old PHP versions)
+- works with PHP >= 7.1
 - backend only, so you can build your own frontend however you like it.
 
 Installation
@@ -28,7 +28,7 @@ You can install this via composer using
     }
 }
 ```
-or just download the `Sudoku.php` file and include it to your project. 
+or just download the `Sudoku.php` file and include it to your project.
 Make sure to use the namespace `AbcAeffchen\sudoku`.
 
 How to use
@@ -38,11 +38,11 @@ How to use
 use AbcAeffchen\sudoku\Sudoku;
 $task = Sudoku::generate(9, Sudoku::NORMAL);
 ```
-Generates a standard 9x9 Sudoku with normal difficulty. You can use the difficulties 
+Generates a standard 9x9 Sudoku with normal difficulty. You can use the difficulties
 `VERY_EASY`, `EASY`, `NORMAL`, `MEDIUM`, `HARD`.
 
-`$task` contains a two dimensional array of integers, where the gaps are set to `null`. 
-You can use 
+`$task` contains a two dimensional array of integers, where the gaps are set to `null`.
+You can use
 ```
 list($task,$solution) = Sudoku::generateWithSolution(9, Sudoku::NORMAL)
 ```
@@ -53,7 +53,7 @@ You can reproduce the Sudoku by providing a seed.
 $seed = 0;
 $task = Sudoku::generate(9, Sudoku::NORMAL, $seed);
 ```
-This way cou could store a seed seed and reproduce the task at any time.  
+This way cou could store a seed seed and reproduce the task at any time.
 The seed can be any positive integer.
 
 #### Check a solution
@@ -82,7 +82,7 @@ This function is used to generate the Sudokus, but you can also use it to solve 
 ```
 $solution = Sudoku::solve($task);
 ```
-You only have to make sure, that `$task` is a two dimensional int array containing only numbers 
+You only have to make sure, that `$task` is a two dimensional int array containing only numbers
 from 1 to the size and all gaps contain `null`.
 
 License
