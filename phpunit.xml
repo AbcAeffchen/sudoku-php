@@ -9,9 +9,14 @@
          processIsolation="false"
          stopOnFailure="false"
          syntaxCheck="false">
+    <coverage processUncoveredFiles="true">
+        <include>
+            <directory suffix=".php">./src</directory>
+        </include>
+    </coverage>
     <testsuites>
         <testsuite name="sudoku-php Tests">
-            <directory suffix=".php">./tests/</directory>
+            <file>./tests/SudokuTest.php</file>
         </testsuite>
     </testsuites>
 </phpunit>

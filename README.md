@@ -1,7 +1,7 @@
 sudoku-php
 =====
 
-[![Build Status](https://travis-ci.org/AbcAeffchen/sudoku-php.svg?branch=master)](https://travis-ci.org/AbcAeffchen/sudoku-php)
+[![Unit Tests](https://github.com/AbcAeffchen/sudoku-php/actions/workflows/php.yml/badge.svg)](https://github.com/AbcAeffchen/sudoku-php/actions/workflows/php.yml)
 [![Latest Stable Version](https://poser.pugx.org/abcaeffchen/sudoku-php/v/stable.svg)](https://packagist.org/packages/abcaeffchen/sudoku-php) 
 [![Total Downloads](https://poser.pugx.org/abcaeffchen/sudoku-php/downloads.svg)](https://packagist.org/packages/abcaeffchen/sudoku-php) 
 [![License](https://poser.pugx.org/abcaeffchen/sudoku-php/license.svg)](https://packagist.org/packages/abcaeffchen/sudoku-php)
@@ -15,7 +15,7 @@ Generate random Sudokus of different size and difficulty and check the solution.
 - Sudokus are reproducible via a integer seed.
 - Check if a input is a solution of any Sudoku or a solution to a specific task.
 - Solve Sudokus.
-- works with PHP 5.6 and 7.0 (maybe also with PHP < 5.6, but no one should use that old PHP versions)
+- works with PHP 7.4 up to 8.2 (maybe also work with PHP < 7.4, but these versions are not supported anymore)
 - backend only, so you can build your own frontend however you like it.
 
 Installation
@@ -24,7 +24,7 @@ You can install this via composer using
 ```json
 {
     "require": {
-        "abcaeffchen/sudoku-php": "~1.0.0"
+        "abcaeffchen/sudoku-php": "~1.1.0"
     }
 }
 ```

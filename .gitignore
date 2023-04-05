@@ -5,3 +5,6 @@
 vendor/
 composer.lock
 composer.phar
+
+# phpunit stuff
+/.phpunit.result.cache

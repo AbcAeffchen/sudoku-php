@@ -7,7 +7,7 @@ use AbcAeffchen\sudoku\Sudoku;
 /**
  * @author    Alexander Schickedanz (AbcAeffchen) <abcaeffchen@gmail.com>
  */
-class SudokuTest extends PHPUnit_Framework_TestCase
+class SudokuTest extends PHPUnit\Framework\TestCase
 {
 
     public function testCheckInput()
@@ -19,18 +19,18 @@ class SudokuTest extends PHPUnit_Framework_TestCase
                   [2,3,null,1],
                   [4,1,2,3]];
 
-        static::assertTrue(Sudoku::checkInput($valid1));
+        $this->assertTrue(Sudoku::checkInput($valid1));
 
         $valid2 = [['1','2','3','4'],
                    ['3','4','1','2'],
                    ['2','3','4','1'],
                    ['4','1','2','3']];
 
-        static::assertTrue(Sudoku::checkInput($valid2));
+        $this->assertTrue(Sudoku::checkInput($valid2));
 
         foreach($valid2 as $row)
         {
-            static::assertContainsOnly('int', $row);
+            $this->assertContainsOnly('int', $row);
         }
 
         // should be invalid
@@ -39,21 +39,21 @@ class SudokuTest extends PHPUnit_Framework_TestCase
                     [2,5,null,1],
                     [4,1,2,3]];
 
-        static::assertFalse(Sudoku::checkInput($invalid));
+        $this->assertFalse(Sudoku::checkInput($invalid));
 
         $invalid = [[1,2,3,4],
                     [3,4,'x',2],
                     [2,5,null,1],
                     [4,1,2,3]];
 
-        static::assertFalse(Sudoku::checkInput($invalid));
+        $this->assertFalse(Sudoku::checkInput($invalid));
 
         $invalid = [[1,2,3,4],
                     [3,4,1.1,2],
                     [2,5,null,1],
                     [4,1,2,3]];
 
-        static::assertFalse(Sudoku::checkInput($invalid));
+        $this->assertFalse(Sudoku::checkInput($invalid));
 
         // different sizes
         $sudokus = [];
@@ -63,12 +63,12 @@ class SudokuTest extends PHPUnit_Framework_TestCase
             $sudokus[$size] = array_fill(0,$size,$row);
         }
 
-        static::assertFalse(Sudoku::checkInput($sudokus[1]));
-        static::assertFalse(Sudoku::checkInput($sudokus[49]));
-        static::assertTrue(Sudoku::checkInput($sudokus[4]));
-        static::assertTrue(Sudoku::checkInput($sudokus[9]));
-        static::assertTrue(Sudoku::checkInput($sudokus[16]));
-        static::assertTrue(Sudoku::checkInput($sudokus[36]));
+        $this->assertFalse(Sudoku::checkInput($sudokus[1]));
+        $this->assertFalse(Sudoku::checkInput($sudokus[49]));
+        $this->assertTrue(Sudoku::checkInput($sudokus[4]));
+        $this->assertTrue(Sudoku::checkInput($sudokus[9]));
+        $this->assertTrue(Sudoku::checkInput($sudokus[16]));
+        $this->assertTrue(Sudoku::checkInput($sudokus[36]));
     }
 
     public function testCheckSolution()
@@ -78,7 +78,7 @@ class SudokuTest extends PHPUnit_Framework_TestCase
                    [3,4,1,2],
                    [2,3,4,1],
                    [4,1,2,3]];
-        static::assertTrue(Sudoku::checkSolution($valid1));
+        $this->assertTrue(Sudoku::checkSolution($valid1));
 
         $valid2 = [[5,3,4,6,7,8,9,1,2],
                    [6,7,2,1,9,5,3,4,8],
@@ -89,9 +89,9 @@ class SudokuTest extends PHPUnit_Framework_TestCase
                    [9,6,1,5,3,7,2,8,4],
                    [2,8,7,4,1,9,6,3,5],
                    [3,4,5,2,8,6,1,7,9]];
-        static::assertTrue(Sudoku::checkSolution($valid2));
+        $this->assertTrue(Sudoku::checkSolution($valid2));
 
-        static::assertFalse(Sudoku::checkSolution($valid1,$valid2));
+        $this->assertFalse(Sudoku::checkSolution($valid1,$valid2));
         $task1 = [[5,3,4,6,7,8,9,1,2],
                   [6,7,2,1,9,5,3,null,null],
                   [1,9,8,3,4,2,5,6,7],
@@ -111,20 +111,20 @@ class SudokuTest extends PHPUnit_Framework_TestCase
                    [2,8,7,4,1,9,6,3,5],
                    [3,4,5,2,8,6,1,7,9]];
 
-        static::assertTrue(Sudoku::checkSolution($valid2,$task1));
-        static::assertFalse(Sudoku::checkSolution($valid2,$task2));
+        $this->assertTrue(Sudoku::checkSolution($valid2,$task1));
+        $this->assertFalse(Sudoku::checkSolution($valid2,$task2));
 
         // invalid Sudokus
         $invalid1 = [[1,3,2,4],
                    [3,4,1,2],
                    [2,3,4,1],
                    [4,1,2,3]];
-        static::assertFalse(Sudoku::checkSolution($invalid1));
+        $this->assertFalse(Sudoku::checkSolution($invalid1));
         $invalid2 = [[1,null,3,4],
                    [3,4,1,2],
                    [2,3,4,1],
                    [4,1,2,3]];
-        static::assertFalse(Sudoku::checkSolution($invalid2));
+        $this->assertFalse(Sudoku::checkSolution($invalid2));
 
     }
 
@@ -140,7 +140,7 @@ class SudokuTest extends PHPUnit_Framework_TestCase
                       [2,3,4,1],
                       [4,1,2,3]];
         
-        static::assertSame($solution1, Sudoku::solve($sudoku1));
+        $this->assertSame($solution1, Sudoku::solve($sudoku1));
 
         $sudoku2 = [[null,null,null,null,null,null,null,null,null],
                     [null,7,2,1,9,5,3,4,8],
@@ -161,9 +161,9 @@ class SudokuTest extends PHPUnit_Framework_TestCase
                       [2,8,7,4,1,9,6,3,5],
                       [3,4,5,2,8,6,1,7,9]];
 
-        static::assertSame($solution2, Sudoku::solve($sudoku2));
+        $this->assertSame($solution2, Sudoku::solve($sudoku2));
 
-        static::assertFalse(Sudoku::solve([[null,null,null,2],
+        $this->assertFalse(Sudoku::solve([[null,null,null,2],
                                            [null,4,null,null],
                                            [null,3,null,null],
                                            [null,1,null,null]]));
@@ -182,15 +182,15 @@ class SudokuTest extends PHPUnit_Framework_TestCase
 
             // it is a sudoku, since:
             // - the input is valid
-            static::assertTrue(Sudoku::checkInput($sudoku));
+            $this->assertTrue(Sudoku::checkInput($sudoku));
             // - it is not a solution
-            static::assertFalse(Sudoku::checkSolution($sudoku));
+            $this->assertFalse(Sudoku::checkSolution($sudoku));
             // - but it is solvable
-            static::assertNotFalse(Sudoku::solve($sudoku));
+            $this->assertNotFalse(Sudoku::solve($sudoku));
         }
 
         // check reproducibility
-        static::assertSame(Sudoku::generate(9, Sudoku::NORMAL, 0),
+        $this->assertSame(Sudoku::generate(9, Sudoku::NORMAL, 0),
                            Sudoku::generate(9, Sudoku::NORMAL, 0));
     }
 
