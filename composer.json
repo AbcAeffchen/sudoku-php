@@ -2,7 +2,7 @@
   "name": "abcaeffchen/sudoku-php",
   "description": "Generate random Sudokus of different size and difficulty and check the solution.",
   "minimum-stability": "stable",
-  "license": "LGPL v3.0-only",
+  "license": "LGPL-3.0-only",
   "authors": [
     {
       "name": "Alexander Schickedanz (AbcAeffchen)",
